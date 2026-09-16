@@ -1,34 +1,27 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0b1020" />
-  <meta name="description" content="One-Minute University — build your knowledge one minute at a time." />
-  <title>One-Minute University</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0b1020" />
+<meta name="description" content="One-Minute University — build your knowledge one minute at a time." />
+<title>One-Minute University</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <button class="brand" id="homeBtn" aria-label="Go home"><span class="brand-mark">1M</span><span>One-Minute <b>University</b></span></button>
-      <div class="top-actions"><button class="icon-btn" id="searchBtn" aria-label="Search">⌕</button><button class="profile-pill" id="profileBtn"><span class="avatar">K</span><span class="profile-text">Learner</span></button></div>
-    </header>
-    <main>
-      <section class="hero" id="homeView">
-        <div class="hero-copy"><span class="eyebrow">LEARN SOMETHING EVERY DAY</span><h1>Build your knowledge,<br /><em>one minute</em> at a time.</h1><p>Fast lessons. One idea. One example. One question. No endless scrolling.</p><div class="hero-actions"><button class="primary-btn" id="startBtn">Start learning <span>→</span></button><button class="ghost-btn" id="exploreBtn">Explore topics</button></div><div class="mini-stats"><span>🔥 <b id="streakStat">0</b> day streak</span><span>✦ <b id="xpStat">0</b> XP</span><span>◷ 60 sec lessons</span></div></div>
-        <div class="hero-card"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="floating-card card-a"><span>⚛️</span><b>Quantum</b><small>Physics</small></div><div class="floating-card card-b"><span>🧬</span><b>DNA</b><small>Biology</small></div><div class="floating-card card-c"><span>🌌</span><b>Black Holes</b><small>Astronomy</small></div><div class="core-card"><span class="core-icon">✦</span><strong>1 MIN</strong><small>to know something new</small></div></div>
-      </section>
-      <section class="quick-actions"><div class="section-heading"><div><span class="eyebrow">YOUR ROUTINE</span><h2>Learn smarter.</h2></div></div><div class="quick-grid"><button class="journey-card" id="dailyBtn"><span class="journey-icon">🔥</span><div><b>Daily 5</b><p id="dailyProgress">0/5 complete</p></div><span>→</span></button><button class="journey-card" id="reviewBtn"><span class="journey-icon">🧠</span><div><b>Review mistakes</b><p>Practice what you missed.</p></div><span>→</span></button></div></section>
-      <section class="topics-section" id="topicsView"><div class="section-heading"><div><span class="eyebrow">EXPLORE</span><h2>Choose your rabbit hole.</h2></div><button class="text-btn" id="allTopicsBtn">View all →</button></div><div class="topic-grid" id="topicGrid"></div></section>
-      <section class="continue-section" id="continueView"><div class="section-heading"><div><span class="eyebrow">YOUR JOURNEY</span><h2>Keep going.</h2></div></div><div class="journey-card"><div><span class="journey-icon">🔥</span><div><b id="journeyTitle">Your first lesson is waiting.</b><p id="journeyText">Complete a lesson to start building your knowledge streak.</p></div></div><button class="primary-btn small" id="continueBtn">Continue →</button></div></section>
-      <section class="profile-view hidden" id="profileView"><button class="back-btn" id="profileBack">← Back</button><span class="eyebrow">YOUR PROFILE</span><h2>Knowledge in progress.</h2><div class="profile-stats"><div><strong id="profileXP">0</strong><span>XP</span></div><div><strong id="profileLessons">0</strong><span>Lessons</span></div><div><strong id="profileStreak">0</strong><span>Day streak</span></div></div><div class="progress-panel"><div class="progress-label"><span>Overall progress</span><b id="progressPercent">0%</b></div><div class="progress-track"><i id="progressBar"></i></div></div><h3>Recent learning</h3><div id="recentList" class="recent-list"></div></section>
-    </main>
-    <nav class="bottom-nav"><button class="nav-item active" data-nav="homeView">⌂<span>Home</span></button><button class="nav-item" data-nav="topicsView">◈<span>Explore</span></button><button class="nav-item" data-nav="profileView">◉<span>Profile</span></button></nav>
-  </div>
-  <div class="lesson-overlay hidden" id="lessonOverlay"><div class="lesson-shell"><header class="lesson-top"><button class="close-btn" id="closeLesson">×</button><div class="lesson-progress"><i id="lessonProgress"></i></div><span id="lessonCount">1 / 5</span></header><div class="lesson-content" id="lessonContent"></div><div class="lesson-footer"><span id="timerLabel">60 sec</span><button class="next-btn" id="lessonNext">Continue →</button></div></div></div>
-  <div class="toast" id="toast"></div>
-  <script src="app.js"></script>
-  <script src="patch.js"></script>
+<div class="app-shell">
+<header class="topbar"><button class="brand" id="homeBtn" aria-label="Go home"><span class="brand-mark">1M</span><span>One-Minute <b>University</b></span></button><div class="top-actions"><button class="icon-btn" id="searchBtn" aria-label="Search">⌕</button><button class="profile-pill" id="profileBtn"><span class="avatar">K</span><span class="profile-text">Learner</span></button></div></header>
+<main>
+<section class="hero" id="homeView"><div class="hero-copy"><span class="eyebrow">LEARN SOMETHING EVERY DAY</span><h1>Build your knowledge,<br><em>one minute</em> at a time.</h1><p>Fast lessons. One idea. One example. One question. No endless scrolling.</p><div class="hero-actions"><button class="primary-btn" id="startBtn">Start learning <span>→</span></button><button class="ghost-btn" id="exploreBtn">Explore topics</button></div><div class="mini-stats"><span>🔥 <b id="streakStat">0</b> day streak</span><span>✦ <b id="xpStat">0</b> XP</span><span>◷ 60 sec lessons</span></div></div><div class="hero-card"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="floating-card card-a"><span>⚛️</span><b>Quantum</b><small>Physics</small></div><div class="floating-card card-b"><span>🧬</span><b>DNA</b><small>Biology</small></div><div class="floating-card card-c"><span>🌌</span><b>Black Holes</b><small>Astronomy</small></div><div class="core-card"><span class="core-icon">✦</span><strong>1 MIN</strong><small>to know something new</small></div></div></section>
+<section class="quick-actions"><div class="section-heading"><div><span class="eyebrow">YOUR ROUTINE</span><h2>Learn smarter.</h2></div></div><div class="quick-grid"><button class="journey-card" id="dailyBtn"><span class="journey-icon">🔥</span><div><b>Daily 5</b><p id="dailyProgress">0/5 complete</p></div><span>→</span></button><button class="journey-card" id="reviewBtn"><span class="journey-icon">🧠</span><div><b>Review mistakes</b><p>Practice what you missed.</p></div><span>→</span></button></div></section>
+<section class="topics-section" id="topicsView"><div class="section-heading"><div><span class="eyebrow">EXPLORE</span><h2>Choose your rabbit hole.</h2></div><button class="text-btn" id="allTopicsBtn">View all →</button></div><div class="topic-grid" id="topicGrid"></div></section>
+<section class="continue-section" id="continueView"><div class="section-heading"><div><span class="eyebrow">YOUR JOURNEY</span><h2>Keep going.</h2></div></div><div class="journey-card"><div><span class="journey-icon">🔥</span><div><b id="journeyTitle">Your first lesson is waiting.</b><p id="journeyText">Complete a lesson to start building your knowledge streak.</p></div></div><button class="primary-btn small" id="continueBtn">Continue →</button></div></section>
+<section class="profile-view hidden" id="profileView"><button class="back-btn" id="profileBack">← Back</button><span class="eyebrow">YOUR PROFILE</span><h2>Knowledge in progress.</h2><div class="profile-stats"><div><strong id="profileXP">0</strong><span>XP</span></div><div><strong id="profileLessons">0</strong><span>Lessons</span></div><div><strong id="profileStreak">0</strong><span>Day streak</span></div></div><div class="progress-panel"><div class="progress-label"><span>Overall progress</span><b id="progressPercent">0%</b></div><div class="progress-track"><i id="progressBar"></i></div></div><h3>Recent learning</h3><div id="recentList" class="recent-list"></div></section>
+</main>
+<nav class="bottom-nav"><button class="nav-item active" data-nav="homeView">⌂<span>Home</span></button><button class="nav-item" data-nav="topicsView">◈<span>Explore</span></button><button class="nav-item" data-nav="profileView">◉<span>Profile</span></button></nav>
+</div>
+<div class="lesson-overlay hidden" id="lessonOverlay"><div class="lesson-shell"><header class="lesson-top"><button class="close-btn" id="closeLesson">×</button><div class="lesson-progress"><i id="lessonProgress"></i></div><span id="lessonCount">1 / 5</span></header><div class="lesson-content" id="lessonContent"></div><div class="lesson-footer"><span id="timerLabel">60 sec</span><button class="next-btn" id="lessonNext">Continue →</button></div></div></div>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
 </body>
 </html>
