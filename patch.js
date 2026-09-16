@@ -2,6 +2,13 @@
 (function(){
   const localDay=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
   today=localDay;
+  resetDailySafe=function(){
+    if(state.dailyDate!==today()){
+      state.dailyDate=today();
+      state.dailyDone=0;
+      localStorage.setItem('omu-state',JSON.stringify(state));
+    }
+  };
   completeLesson=function(l,correct){
     const isNew=!state.completed.includes(l.title);
     if(feedMode==='daily') state.dailyDone=Math.min(5,state.dailyDone+1);
@@ -21,7 +28,6 @@
     state.lastDay=day;
     save();
   };
-  const oldStartDaily=startDaily;
   startDaily=function(){
     resetDailySafe();
     const unseen=lessons.filter(l=>!state.completed.includes(l.title));
@@ -30,12 +36,11 @@
     feedMode='daily';
     openLesson();
   };
-  resetDailySafe=function(){
-    if(state.dailyDate!==today()){
-      state.dailyDate=today();
-      state.dailyDone=0;
-      localStorage.setItem('omu-state',JSON.stringify(state));
-    }
-  };
+  const daily=document.getElementById('dailyBtn');
+  if(daily){
+    const fresh=daily.cloneNode(true);
+    daily.replaceWith(fresh);
+    fresh.addEventListener('click',startDaily);
+  }
   document.documentElement.classList.add('omu-ready');
 })();
