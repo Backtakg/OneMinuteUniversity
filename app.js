@@ -118,6 +118,7 @@ function showView(id) {
   document.querySelectorAll("main>section").forEach(s => s.classList.add("hidden"));
   $(id)?.classList.remove("hidden");
   $("searchInput")?.addEventListener("input",e=>renderSearchResults(e.target.value));
+  renderKnowledgeMap();
   document.querySelectorAll(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.nav === id));
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -327,23 +328,8 @@ function renderSearchResults(query = "") { const q=query.trim().toLowerCase(); c
 
 window.setSearchDifficulty=(level)=>{window.searchDifficulty=level;document.querySelectorAll(".difficulty-chip").forEach(b=>b.classList.toggle("active",b.dataset.level===level));renderSearchResults($("searchInput")?.value||"")};
 function openSearch() { window.searchDifficulty="All"; showView("searchView"); const input=$("searchInput"); if(input){input.value="";renderSearchResults("");setTimeout(()=>input.focus(),80)} }
-  const query = window.prompt("Search lessons or topics");
-  if (query === null) return;
-  const q = query.trim().toLowerCase();
-  if (!q) return;
-  const matches = lessons.filter(l =>
-    [l.title,l.tag,l.topic,l.concept,l.example].join(" ").toLowerCase().includes(q)
-  );
-  if (!matches.length) {
-    toast("No lessons found.");
-    return;
-  }
-  const first = matches[0];
-  queue = matches;
-  mode = "search";
-  openLesson();
-  toast(`${matches.length} lesson${matches.length===1?"":"s"} found`);
-}
+
+function renderKnowledgeMap() { const g=$("knowledgeMap"); if(!g)return; g.innerHTML=topics.map(t=>{ const ls=lessons.filter(l=>l.topic===t.id); const done=ls.filter(l=>state.completed.includes(l.title)).length; const pct=ls.length?Math.round(done/ls.length*100):0; return '<button class="map-node '+(pct===100?'learned':'')+'" data-topic="'+t.id+'"><div class="node-icon">'+t.icon+'</div><h3>'+escapeHtml(t.name)+'</h3><p>'+escapeHtml(t.desc)+'</p><div class="node-progress"><i style="width:'+pct+'%"></i></div><div class="node-meta"><span>'+done+'/'+ls.length+' learned</span><span class="node-status">'+(pct===100?'Learned':pct?'In progress':'Not started')+'</span></div></button>'; }).join(""); g.querySelectorAll(".map-node").forEach(b=>b.addEventListener("click",()=>startTopic(b.dataset.topic))); }
 
 function bind() {
   [
@@ -357,7 +343,7 @@ function bind() {
     ["searchBtn",openSearch],["searchBack",()=>showView("homeView")],["clearSearch",()=>{const i=$("searchInput");if(i){i.value="";renderSearchResults("");i.focus()}}],["clearSearchFilters",()=>{const i=$("searchInput");if(i){i.value="";renderSearchResults("");i.focus()}}],
     ["homeBtn",()=>showView("homeView")],
     ["exploreBtn",()=>showView("topicsView")],
-    ["allTopicsBtn",()=>showView("topicsView")],
+    ["mapBtn",()=>{showView("mapView");renderKnowledgeMap()}],["mapBack",()=>showView("homeView")],["allTopicsBtn",()=>showView("topicsView")],
     ["profileBack",()=>showView("homeView")]
   ].forEach(([id,fn]) => $(id)?.addEventListener("click",fn));
 
