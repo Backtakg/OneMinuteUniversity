@@ -38,6 +38,8 @@ let searchHandler = null;
 
 const $ = id => document.getElementById(id);
 
+if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem("omu-state") || "{}");
