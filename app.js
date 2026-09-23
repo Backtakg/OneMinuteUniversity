@@ -120,7 +120,8 @@ function renderTopics() {
   g.querySelectorAll(".topic-card").forEach(b => b.addEventListener("click", () => startTopic(b.dataset.topic)));
 }
 
-function showView(id) {\n  if ($("lessonOverlay")?.classList.contains("hidden") === false) closeLesson();
+function showView(id) {
+  if ($("lessonOverlay")?.classList.contains("hidden") === false) closeLesson();
   document.querySelectorAll("main>section").forEach(s => s.classList.add("hidden"));
   $(id)?.classList.remove("hidden");
   renderKnowledgeMap();
