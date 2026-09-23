@@ -120,10 +120,9 @@ function renderTopics() {
   g.querySelectorAll(".topic-card").forEach(b => b.addEventListener("click", () => startTopic(b.dataset.topic)));
 }
 
-function showView(id) {
+function showView(id) {\n  if ($("lessonOverlay")?.classList.contains("hidden") === false) closeLesson();
   document.querySelectorAll("main>section").forEach(s => s.classList.add("hidden"));
   $(id)?.classList.remove("hidden");
-  $("searchInput")?.addEventListener("input",e=>renderSearchResults(e.target.value));
   renderKnowledgeMap();
   document.querySelectorAll(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.nav === id));
   window.scrollTo({top:0,behavior:"smooth"});
@@ -187,10 +186,10 @@ function renderLesson() {
   $("lessonProgress").style.width = (index / Math.max(1,queue.length) * 100) + "%";
 
   if (phase === 0) {
-    $("lessonContent").innerHTML = `<span class="lesson-kicker">${l.tag} · ${l.difficulty.toUpperCase()} · 30 SEC</span><h2>${l.icon} ${l.title}</h2><p>${l.concept}</p><div class="takeaway-box"><strong>KEY TAKEAWAY</strong><div>${l.takeaway || l.concept}</div></div>`;
+    $("lessonContent").innerHTML = `<span class="lesson-kicker">${l.tag} · ${l.difficulty.toUpperCase()} · 30 SEC</span><h2>${l.icon} ${l.title}</h2><p>${l.concept}</p><div class="takeaway-box"><strong>KEY TAKEAWAY</strong><div>${l.takeaway || l.concept}</div></div><div class="video-box"><div><strong>WATCH & SEE</strong><p>Watch a short explainer while you learn.</p></div><a class="video-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(l.title + " explained")}" target="_blank" rel="noopener">▶ Watch video</a></div>`;
     startTimer(30,"30 sec");
   } else if (phase === 1) {
-    $("lessonContent").innerHTML = `<span class="lesson-kicker">MAKE IT CLICK · 20 SEC</span><h2>Think of it <em>like this.</em></h2><div class="example-box"><strong>MAKE IT CLICK</strong><div>${l.example}</div></div><div class="why-box"><strong>WHY IT MATTERS</strong><div>${l.why || "Connecting the idea to a real situation makes it easier to remember."}</div></div>`;
+    $("lessonContent").innerHTML = `<span class="lesson-kicker">MAKE IT CLICK · 20 SEC</span><h2>Think of it <em>like this.</em></h2><div class="example-box"><strong>MAKE IT CLICK</strong><div>${l.example}</div></div><div class="why-box"><strong>WHY IT MATTERS</strong><div>${l.why || "Connecting the idea to a real situation makes it easier to remember."}</div></div><div class="source-box"><strong>GO DEEPER</strong><div>Search for this topic if you want a longer explanation, diagrams, or examples.</div><a class="source-link" href="https://www.google.com/search?q=${encodeURIComponent(l.title + " explanation")}" target="_blank" rel="noopener">Explore more →</a></div>`;
     startTimer(20,"20 sec");
   } else {
     $("lessonContent").innerHTML = `<span class="lesson-kicker">RECALL · 10 SEC</span><h2>Quick <em>test.</em></h2><p>${l.question}</p><div class="quiz-options">${l.options.map((o,i)=>`<button class="quiz-option" data-i="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join("")}</div>`;
@@ -330,8 +329,34 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 }
 
-function renderSearchResults(query = "") { const q=query.trim().toLowerCase(); const level=window.searchDifficulty||"All"; const results=lessons.filter(l=>(level==="All"||l.difficulty===level)&&(!q||[l.title,l.tag,l.topic,l.concept,l.example].join(" ").toLowerCase().includes(q))); const count=$("searchResultCount"); if(count) count.textContent=q ? \`${results.length} result${results.length===1?'':'s'}\` : \`${level==='All'?'All levels':level} · ${results.length} lessons\`; const box=$("searchResults"); if(!box)return; if(!results.length){box.innerHTML=\`<div class="search-empty"><strong>No lessons found</strong><span>Try a broader search like “space”, “memory”, or “technology”.</span></div>\`;return;} box.innerHTML=results.map(l=>\`<button class="search-result" data-title="${escapeHtml(l.title)}"><span class="search-result-icon">${l.icon}</span><span class="search-result-main"><b>${escapeHtml(l.title)}</b><p>${escapeHtml(l.concept.replace(/<[^>]*>/g,''))}</p></span><span class="search-result-tag">${escapeHtml(l.difficulty)} · ${escapeHtml(l.tag)}</span><span class="search-result-arrow">→</span></button>\`).join(""); box.querySelectorAll(".search-result").forEach(b=>b.addEventListener("click",()=>{const l=lessons.find(x=>x.title===b.dataset.title);if(l){queue=[l];mode="search";openLesson()}})); }
-
+function renderSearchResults(query = "") {
+  const q = query.trim().toLowerCase();
+  const level = window.searchDifficulty || "All";
+  const results = lessons.filter(l => {
+    const matchesLevel = level === "All" || l.difficulty === level;
+    const haystack = [l.title, l.tag, l.topic, l.concept, l.example, l.question, l.takeaway, l.why].join(" ").toLowerCase();
+    return matchesLevel && (!q || haystack.includes(q));
+  });
+  const count = $("searchResultCount");
+  if (count) count.textContent = q
+    ? results.length + " result" + (results.length === 1 ? "" : "s")
+    : (level === "All" ? "All levels" : level) + " · " + results.length + " lessons";
+  const box = $("searchResults");
+  if (!box) return;
+  if (!results.length) {
+    box.innerHTML = '<div class="search-empty"><strong>No lessons found</strong><span>Try “space”, “technology”, “DNA”, or “gravity”.</span></div>';
+    return;
+  }
+  box.innerHTML = results.map(l => '<button class="search-result" data-title="' + escapeHtml(l.title) + '">' +
+    '<span class="search-result-icon">' + l.icon + '</span>' +
+    '<span class="search-result-main"><b>' + escapeHtml(l.title) + '</b><p>' + escapeHtml(l.concept.replace(/<[^>]*>/g, "")) + '</p></span>' +
+    '<span class="search-result-tag">' + escapeHtml(l.difficulty) + ' · ' + escapeHtml(l.tag) + '</span>' +
+    '<span class="search-result-arrow">→</span></button>').join("");
+  box.querySelectorAll(".search-result").forEach(b => b.addEventListener("click", () => {
+    const l = lessons.find(x => x.title === b.dataset.title);
+    if (l) { queue = [l]; mode = "search"; openLesson(); }
+  }));
+}
 window.setSearchDifficulty=(level)=>{window.searchDifficulty=level;document.querySelectorAll(".difficulty-chip").forEach(b=>b.classList.toggle("active",b.dataset.level===level));renderSearchResults($("searchInput")?.value||"")};
 function openSearch() { window.searchDifficulty="All"; showView("searchView"); const input=$("searchInput"); if(input){input.value="";renderSearchResults("");setTimeout(()=>input.focus(),80)} }
 
@@ -356,6 +381,9 @@ function bind() {
   document.querySelectorAll(".nav-item").forEach(n =>
     n.addEventListener("click",()=>showView(n.dataset.nav))
   );
+
+  $("searchInput")?.addEventListener("input", e => renderSearchResults(e.target.value));
+  document.querySelectorAll(".difficulty-chip").forEach(b => b.addEventListener("click", () => window.setSearchDifficulty(b.dataset.level)));
 
   let startY = 0;
   const shell = document.querySelector(".lesson-shell");
