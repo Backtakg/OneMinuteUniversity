@@ -82,8 +82,12 @@ function renderStats() {
   if ($("progressBar")) $("progressBar").style.width = pct + "%";
   if ($("dailyProgress")) $("dailyProgress").textContent = `${Math.min(5,state.dailyDone)}/5 complete`;
   renderRecent();
+  renderAchievements();
   renderJourney();
 }
+
+const achievements=[{id:"first",icon:"🌱",name:"First Step",desc:"Complete your first lesson.",test:s=>s.lessons>=1},{id:"five",icon:"⚡",name:"Quick Learner",desc:"Complete 5 lessons.",test:s=>s.lessons>=5},{id:"ten",icon:"🧠",name:"Knowledge Builder",desc:"Complete 10 lessons.",test:s=>s.lessons>=10},{id:"streak3",icon:"🔥",name:"On a Roll",desc:"Reach a 3-day streak.",test:s=>s.streak>=3},{id:"streak7",icon:"🏆",name:"Week Strong",desc:"Reach a 7-day streak.",test:s=>s.streak>=7},{id:"daily",icon:"🎯",name:"Daily Complete",desc:"Finish a Daily 5.",test:s=>s.dailyDone>=5}];
+function renderAchievements(){const e=$("achievementList");if(!e)return;e.innerHTML=achievements.map(a=>{const ok=a.test(state);return '<div class="achievement-card '+(ok?'unlocked':'locked')+'"><div class="achievement-icon">'+a.icon+'</div><div><b>'+a.name+'</b><span>'+a.desc+'</span></div></div>';}).join("");}
 
 function renderRecent() {
   const e = $("recentList");
