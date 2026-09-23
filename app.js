@@ -149,7 +149,7 @@ function startDaily() {
   }
   const unseen = lessons.filter(l => !state.completed.includes(l.title));
   const seen = lessons.filter(l => state.completed.includes(l.title));
-  queue = [...unseen,...seen].slice(0, Math.min(5, lessons.length));
+  queue = [...unseen,...seen].slice(0, Math.min(5 - state.dailyDone, lessons.length));
   mode = "daily";
   openLesson();
 }
@@ -245,7 +245,7 @@ function completeLesson(l,correct) {
   lessonCompleted = true;
   const fresh = !state.completed.includes(l.title);
   if (correct) state.xp += 10;
-  if (mode === "daily" && !state.completed.includes(l.title)) state.dailyDone = Math.min(5,state.dailyDone+1);
+  if (mode === "daily") state.dailyDone = Math.min(5,state.dailyDone+1);
 
   if (fresh) {
     state.completed.push(l.title);
