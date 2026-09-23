@@ -117,6 +117,7 @@ function renderTopics() {
 function showView(id) {
   document.querySelectorAll("main>section").forEach(s => s.classList.add("hidden"));
   $(id)?.classList.remove("hidden");
+  $("searchInput")?.addEventListener("input",e=>renderSearchResults(e.target.value));
   document.querySelectorAll(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.nav === id));
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -322,7 +323,9 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 }
 
-function openSearch() {
+function renderSearchResults(query = "") { const q=query.trim().toLowerCase(); const results=q ? lessons.filter(l=>[l.title,l.tag,l.topic,l.concept,l.example].join(" ").toLowerCase().includes(q)) : lessons; const count=$("searchResultCount"); if(count) count.textContent=q ? `${results.length} result${results.length===1?"":"s"}` : `${lessons.length} lessons`; const box=$("searchResults"); if(!box)return; if(!results.length){box.innerHTML=`<div class="search-empty"><strong>No lessons found</strong><span>Try a broader search like “space”, “memory”, or “technology”.</span></div>`;return;} box.innerHTML=results.map((l,i)=>`<button class="search-result" data-title="${escapeHtml(l.title)}"><span class="search-result-icon">${l.icon}</span><span class="search-result-main"><b>${escapeHtml(l.title)}</b><p>${escapeHtml(l.concept.replace(/<[^>]*>/g,""))}</p></span><span class="search-result-tag">${escapeHtml(l.tag)}</span><span class="search-result-arrow">→</span></button>`).join(""); box.querySelectorAll(".search-result").forEach(b=>b.addEventListener("click",()=>{const l=lessons.find(x=>x.title===b.dataset.title);if(l){queue=[l];mode="search";openLesson()}})); }
+
+function openSearch() { showView("searchView"); const input=$("searchInput"); if(input){input.value="";renderSearchResults("");setTimeout(()=>input.focus(),80)} }
   const query = window.prompt("Search lessons or topics");
   if (query === null) return;
   const q = query.trim().toLowerCase();
@@ -350,7 +353,7 @@ function bind() {
     ["closeLesson",closeLesson],
     ["lessonNext",advance],
     ["profileBtn",()=>showView("profileView")],
-    ["searchBtn",openSearch],
+    ["searchBtn",openSearch],["searchBack",()=>showView("homeView")],["clearSearch",()=>{const i=$("searchInput");if(i){i.value="";renderSearchResults("");i.focus()}}],["clearSearchFilters",()=>{const i=$("searchInput");if(i){i.value="";renderSearchResults("");i.focus()}}],
     ["homeBtn",()=>showView("homeView")],
     ["exploreBtn",()=>showView("topicsView")],
     ["allTopicsBtn",()=>showView("topicsView")],
